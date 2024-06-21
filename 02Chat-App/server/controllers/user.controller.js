@@ -4,17 +4,25 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export const usercreate = async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, userName, password, confirmPassword } = req.body;
+  // console.log(name, userName, password, confirmPassword);
   try {
-    const isExist = await User.findOne({ email });
+    const isExist = await User.findOne({ userName: userName });
 
     if (isExist) return next(errorHandler(400, "User already existed"));
 
+    console.log(password.length);
+    // const passLength = password.length
+    if (password.length < 6)
+      return next(errorHandler(400, "please enter minimum 6 charecter"));
+    if (password != confirmPassword)
+      return next(errorHandler(400, "Incorrect Password"));
     const hashPass = bcryptjs.hashSync(password, 10);
 
     await User.create({
       name,
-      email,
+      userName,
+      confirmPassword,
       password: hashPass,
     });
 

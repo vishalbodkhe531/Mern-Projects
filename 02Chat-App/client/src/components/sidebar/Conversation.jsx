@@ -4,7 +4,7 @@ import ConversationMap from "./ConversationMap";
 function Conversation() {
   return (
     <>
-      <div className="flex  gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer mt-4 w-[16rem]">
+      <div className="flex  gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer mt-4 w-[22rem]">
         <div className="avatar online">
           <div className="rounded-full h-12">
             <img

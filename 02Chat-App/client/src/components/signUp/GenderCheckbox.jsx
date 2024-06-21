@@ -1,6 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 
 function GenderCheckbox() {
+  const [checkBoxValue, setcheckBoxValue] = useState("");
+
+  console.log(checkBoxValue);
+
+  // const handleGenderMale = () => {
+  //   setcheckBoxValue("Male");
+  // };
+
+  // const handleGenderFemale = () => {
+  //   setcheckBoxValue("Female");
+  // };
+
   return (
     <div className="flex">
       <div className="form-control">
@@ -9,6 +21,8 @@ function GenderCheckbox() {
           <input
             type="checkbox"
             className="checkbox border-slate-900 checkbox-error"
+            onClick={() => setcheckBoxValue("Male")}
+            checked={checkBoxValue === "Male"}
           />
         </label>
       </div>
@@ -18,6 +32,8 @@ function GenderCheckbox() {
           <input
             type="checkbox"
             className="checkbox border-slate-900 checkbox-accent"
+            onClick={() => setcheckBoxValue("Female")}
+            checked={checkBoxValue === "Female"}
           />
         </label>
       </div>

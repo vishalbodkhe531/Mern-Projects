@@ -5,8 +5,8 @@ function SearchInput() {
   return (
     <div className="flex items-center justify-center text-white p-1 ">
       <form>
-        <div className="flex justify-between w-full rounded-r-full rounded-l-full">
-          <input type="text" placeholder="Type here" className="input" />
+        <div className="flex justify-between w-[22rem] rounded-full">
+          <input type="text" placeholder="Type here" className="input w-full" />
           <button className="p-3 btn hover:bg-green-500 rounded-md ml-1 ">
             <FaSearch color="white" />
           </button>
