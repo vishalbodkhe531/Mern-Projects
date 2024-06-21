@@ -2,12 +2,16 @@ import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import SignIn from "./components/signIn/SignIn";
 import SignUp from "./components/signUp/SignUp";
+import Home from "./components/home/Home";
+import MessagesContainer from "./components/messages/MessagesContainer";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<SignIn />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/" element={<MessagesContainer />} />
+        <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
       </Routes>
     </Router>

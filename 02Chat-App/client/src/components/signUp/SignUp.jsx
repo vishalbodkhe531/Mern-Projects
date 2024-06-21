@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import GenderCheckbox from "./GenderCheckbox";
 
 function SignUp() {
   return (
@@ -47,7 +48,11 @@ function SignUp() {
               className="w-full input input-bordered h-13"
             />
           </div>
-          <Link to={"/"} className=" hover:text-blue-600 mt-4 inline-block">
+          <GenderCheckbox />
+          <Link
+            to={"/sign-in"}
+            className=" hover:text-blue-600 mt-4 inline-block"
+          >
             Already have an accout ?
           </Link>
           <div>
