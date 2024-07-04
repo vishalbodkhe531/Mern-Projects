@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
+import { API } from "../main";
 import {
   signInFailuer,
   signInStart,
@@ -25,11 +26,12 @@ function SignIn() {
     e.preventDefault();
     try {
       dispatch(signInStart(true));
-      const data = await fetch("/api/user/login", {
+      const data = await fetch(`${API}/api/user/login`, {
         method: "POST",
         headers: {
           "Content-Type": "Application/json",
         },
+        credentials : "include",
         body: JSON.stringify(formData),
       });
 

@@ -1,10 +1,19 @@
 import React from "react";
 import ConversationMap from "./ConversationMap";
+import useConversation from "../../zustand/useConversation";
 
-function Conversation() {
+function Conversation({ data, emoji, lastIdx }) {
+  const { selectedConversation, setSelectedConversation } = useConversation();
+
+  const isSelected = selectedConversation?._id === data._id;
   return (
     <>
-      <div className="flex  gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer mt-4 w-[22rem]">
+      <div
+        className={`flex  gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer mt-4 w-[22rem] ${
+          isSelected ? "bg-sky-500" : ""
+        }`}
+        onClick={() => setSelectedConversation(data)}
+      >
         <div className="avatar online">
           <div className="rounded-full h-12">
             <img
@@ -15,16 +24,12 @@ function Conversation() {
         </div>
         <div className="flex flex-col flex-1">
           <div className="flex gap-3 justify-between">
-            <p className="font-bold text-gray-200">Ram Naik</p>
-            <span>
-              <img
-                src="https://emojiisland.com/cdn/shop/products/Emoji_Icon_-_Sunglasses_cool_emoji_large.png?v=1571606093"
-                className="h-6"
-              />
-            </span>
+            <p className="font-bold text-gray-200">{data.name}</p>
+            <span>{emoji}</span>
           </div>
         </div>
       </div>
+      {!lastIdx && <div className="divider my-0 py-0 h-1" />}
     </>
   );
 }

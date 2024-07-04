@@ -4,6 +4,7 @@ import { databaseConnection } from "./data/data.js";
 import userRoutes from "./routes/user.routes.js";
 import { errorMiddleware } from "./middleware/error.middleware.js";
 import cookieParser from "cookie-parser";
+import messageRoutes from "./routes/messages.routes.js";
 config({ path: "./config/.env" });
 databaseConnection();
 
@@ -13,6 +14,7 @@ server.use(cookieParser());
 server.use(express.json());
 
 server.use("/api/user", userRoutes);
+server.use("/api/message", messageRoutes);
 
 server.use(errorMiddleware);
 

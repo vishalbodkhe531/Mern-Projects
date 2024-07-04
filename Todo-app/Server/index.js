@@ -12,7 +12,12 @@ databaseConnection();
 
 const server = express();
 
-server.use(cors());
+server.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 
 server.use(cookieParser());
 

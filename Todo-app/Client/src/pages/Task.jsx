@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { FaRegCircle } from "react-icons/fa";
+import checkedPNG from "../assets/right.png";
 
 function Task({ todoData }) {
   const [updateTask, setUpdateTask] = useState(false);
@@ -8,6 +10,16 @@ function Task({ todoData }) {
   // Delete-Task
   const handleDelete = async () => {
     const data = await fetch(`/api/todo/delete/${todoData._id}`);
+  };
+
+  // console.log(todoData);
+  // check circle
+  const [isCheck, setIsCheck] = useState(todoData.isComplited);
+  const handleCheckCircle = async () => {
+    setIsCheck(true);
+    const data = await fetch(`/api/todo/toogle-task/${todoData._id}`);
+    const result = await data.json();
+    console.log(result);
   };
 
   // Update-Task
@@ -33,13 +45,18 @@ function Task({ todoData }) {
     <>
       <div className="sm:w-[50%] w-[90%] mt-3">
         <div
-          className={`flex border text-white border-black/10 rounded-lg px-3 py-1.5 gap-x-3 shadow-lg shadow-white/70 duration-300  mt-5 `}
+          className={`flex border text-white border-black/10 rounded-lg px-3 py-1.5 gap-x-3 shadow-lg shadow-white/70 duration-300  mt-5 items-center`}
         >
-          <input
-            type="checkbox"
-            className="cursor-pointer"
-            // checked={todo.isCompolited}
-          />
+          <div className="block cursor-pointer relative">
+            <FaRegCircle onClick={handleCheckCircle} />
+            {isCheck ? (
+              <img
+                src={checkedPNG}
+                className="h-6 absolute -top-[7px] -right-0.5"
+                onClick={() => setIsCheck(false)}
+              />
+            ) : null}
+          </div>
           <input
             type="text"
             className={`border outline-none w-full bg-transparent rounded-lg border-transparent 
@@ -52,6 +69,7 @@ function Task({ todoData }) {
           <button
             className="inline-flex w-8 h-8 rounded-lg text-sm border border-black/10 justify-center items-center bg-gray-50 hover:bg-gray-100 shrink-0 disabled:opacity-50"
             onClick={handleEdit}
+            disabled={isCheck}
           >
             {updateTask ? "📁" : "✏️"}
           </button>

@@ -8,7 +8,7 @@ function Headers() {
 
   return (
     <>
-      <nav className="bg-gray-800 ">
+      {/* <nav className="bg-gray-800 ">
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-16 items-center justify-between">
             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -22,13 +22,8 @@ function Headers() {
                 <span className="sr-only">Open main menu</span>
               </button>
             </div>
-            <div className="flex flex-1 items-center sm:items-stretch sm:justify-start text-white text-lg">
+            <div className="flex flex-1 bg-red-900 items-center sm:items-stretch sm:justify-start text-white text-lg sm:m-1">
               <div className="flex flex-shrink-0 items-center mr-10">
-                {/* <img
-                  className="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                  alt="Your Company"
-                /> */}
                 <BsMastodon size="1.50em" />
                 Task-Master
               </div>
@@ -69,6 +64,47 @@ function Headers() {
               </div>
             </div>
           </div>
+        </div>
+      </nav> */}
+
+      <nav className="flex justify-between items-center bg-slate-800 text-white h-16">
+        <div className="">
+          <div className="flex flex-shrink-0 items-center ml-4">
+            <BsMastodon size="1.50em" />
+            Task-Master
+          </div>
+        </div>
+        <div className="flex mr-2">
+          <Link to={"/"}>
+            <div className="hover:shadow-xl p-1 hover:bg-white hover:shadow-white/90 hover:text-black hover:rounded-full mr-3">
+              Home
+            </div>
+          </Link>
+          <Link to={"/about"}>
+            <div className="hover:shadow-xl p-1 hover:bg-white hover:shadow-white/90 hover:text-black hover:rounded-full sm:flex hidden mr-3">
+              About
+            </div>
+          </Link>
+          <Link to={"/todo"}>
+            {" "}
+            <div className="hover:shadow-xl p-1 hover:bg-white hover:shadow-white/90 hover:text-black hover:rounded-full mr-4">
+              Task
+            </div>
+          </Link>
+
+          {currentUser ? (
+            <Link to={"/profile"}>
+              <img
+                src={currentUser.profilePic}
+                alt="profile"
+                className="h-8 rounded-full bg-white p-[1px]"
+              />
+            </Link>
+          ) : (
+            <button className="bg-blue-500 p-1 rounded-md hover:shadow-xl hover:bg-blue-600 hover:shadow-white/70 mr-5">
+              <Link to={"/sign-in"}>Sign In</Link>
+            </button>
+          )}
         </div>
       </nav>
     </>

@@ -20,6 +20,7 @@ import CartData from "../components/CartData";
 import { MdDeleteForever } from "react-icons/md";
 import { useSelector } from "react-redux";
 import Cart from "./Cart";
+import { API } from "../main";
 
 function NoteTask() {
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -37,55 +38,56 @@ function NoteTask() {
   const handleModelSubmite = async (e) => {
     e.preventDefault();
 
-    const data = await fetch(`/api/task/create-task`, {
+    const data = await fetch(`${API}/api/task/create-task`, {
       method: "POST",
       headers: {
         "Content-Type": "Application/json",
       },
+      credentials: "include",
       body: JSON.stringify(formdata),
     });
-
-    const result = await data.json();
-
-    console.log(result);
   };
 
   const handleSelectedDeleteBtn = async () => {
-    const data = await fetch(`/api/task/selected-task-delete`, {
+    const data = await fetch(`${API}/api/task/selected-task-delete`, {
       method: "POST",
       headers: {
         "Content-Type": "Application/json",
       },
+      credentials: "include",
       body: JSON.stringify(selectedCardArr),
     });
-
-    const result = await data.json();
-
-    console.log(result);
   };
 
+  // const handleSelectedDeleteBtn = async () => {
+  //   const data = await fetch(`/api/task/recycle-bin-checkMany`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "Application/json",
+  //     },
+  //     body: JSON.stringify(selectedCardArr),
+  //   });
+  // };
+
+  //SEARCH FEATURE
   const [searchInput, setSearchInput] = useState("");
 
   const [isSearchInput, setIsSearchInput] = useState(false);
 
-  const handleSearchInput = (e) => {
+  const handleSearchInput = async (e) => {
     setSearchInput(e.target.value);
-    // if (searchInput === "") {
-    //   setIsSearchInput(false);
-    // }
-    // console.log(searchInput);
   };
-
-  // find input
 
   const [searchInputArr, setSearchInputArr] = useState([]);
 
   const handleFindSubmite = async (e) => {
     e.preventDefault();
     setIsSearchInput(true);
-    const data = await fetch(`/api/task/search?title=${searchInput}`);
+    const data = await fetch(`${API}/api/task/search?title=${searchInput}`, {
+      method: "GET",
+      credentials: "include",
+    });
     const result = await data.json();
-    // console.log(result);
     setSearchInputArr(result);
   };
   return (
@@ -97,8 +99,7 @@ function NoteTask() {
         backgroundRepeat={"no-repeat"}
         backgroundSize={"cover"}
         backgroundPosition={"center"}
-        opacity="0.5"
-        // bg={"black"}
+        opacity="0.6"
       >
         {" "}
       </Container>
@@ -108,30 +109,43 @@ function NoteTask() {
         left={"50%"}
         transform={"translate(-50%,-50%)"}
         display={"flex"}
-        // bg={"red"}
-        // alignItems={"center"}
         h={"30vh"}
         mt={"4em"}
         justifyContent={"center"}
       >
         <VStack>
-          <Button
-            onClick={onOpen}
-            fontSize={"2rem"}
-            zIndex={"overlay"}
-            pos={"sticky"}
-          >
-            Create Task
-          </Button>
-          <Box w={"40rem"} mt={"5"}>
+          <Box display={"flex"} alignItems={"center"}>
+            <Button
+              onClick={onOpen}
+              fontSize={["1rem", "2rem"]}
+              zIndex={"overlay"}
+              pos={"relative"}
+            >
+              Create Task
+            </Button>
+            <Box pos={"absolute"} right={"5"}>
+              <MdDeleteForever
+                size={"1.50em"}
+                onClick={handleSelectedDeleteBtn}
+                cursor={"pointer"}
+              />
+            </Box>
+          </Box>
+          <Box w={["20rem", "100%"]} mt={"5"}>
             <form onSubmit={handleFindSubmite}>
-              <Box display={"flex"}>
+              <Box
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}
+              >
                 <Input
                   borderWidth={"2px"}
                   value={searchInput}
+                  w={["30", "28rem"]}
+                  h={["2rem", "2.50rem"]}
                   onChange={handleSearchInput}
                 />
-                <Button ml={"2"} type="submit">
+                <Button ml={"2"} type="submit" fontSize={["0.80rem", "1rem"]}>
                   Search
                 </Button>
               </Box>
@@ -188,52 +202,31 @@ function NoteTask() {
           </ModalContent>
         </Modal>
       </Container>
-      <Container
-        pos={"absolute"}
-        top={"40%"}
-        left={"50%"}
-        // bg={"green"}
-        transform={"translate(-50%,-50%)"}
+      <Box
         display={"flex"}
-        // alignItems={"center"}
-        h={"30vh"}
-        maxW={["conainer-xl", "container-2xl"]}
-        mt={"4em"}
         justifyContent={"center"}
-        m={["0", "10"]}
+        alignItems={"center"}
+        w={["100%", "80%"]}
+        flexWrap={"wrap"}
+        p={"0"}
+        pos={"absolute"}
+        top={["35%", "60%"]}
+        left={"50%"}
+        transform={["translate(-50%,0%)", "translate(-50%,-50%)"]}
       >
-        {/* Cart Components */}
-        {
-          isSearchInput ? (
-            searchInputArr.map((cartItem) => (
-              <Box
-                display={"flex"}
-                justifyContent={"center"}
-                alignItems={"center"}
-                w={["90%", "80%"]}
-                flexWrap={"wrap"}
-                p={"0"}
-              >
-                <Cart
-                  key={cartItem._id}
-                  cartId={cartItem._id}
-                  cartTitle={cartItem.title}
-                  cartDesc={cartItem.descriptione}
-                />
-              </Box>
-            ))
-          ) : (
-            <CartData />
-          )
-          // isSearchInput ? : <CartData />
-        }
-
-        <MdDeleteForever
-          size={"2em"}
-          onClick={handleSelectedDeleteBtn}
-          cursor={"pointer"}
-        />
-      </Container>
+        {isSearchInput ? (
+          searchInputArr.map((cartItem) => (
+            <Cart
+              key={cartItem._id}
+              cartId={cartItem._id}
+              cartTitle={cartItem.title}
+              cartDesc={cartItem.descriptione}
+            />
+          ))
+        ) : (
+          <CartData />
+        )}
+      </Box>
     </>
   );
 }

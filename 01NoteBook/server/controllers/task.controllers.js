@@ -118,27 +118,7 @@ export const updateTask = async (req, res, next) => {
   }
 };
 
-// export const selectedTask = async (req, res, next) => {
-//   const { id } = req.params;
-//   try {
-//     const findInDatabase = await Tasks.findById({ _id: id });
-//     findInDatabase.isSelected = !findInDatabase.isSelected;
-//     findInDatabase.save();
-//     res.status(202).json({
-//       success: true,
-//       message: `Task selected value ${findInDatabase.isSelected}`,
-//     });
-//   } catch (error) {
-//     console.log(`error while delete selected task : ${error}`);
-//     next(error);
-//   }
-// };
-
 export const selectedTaskDelete = async (req, res, next) => {
-  // forDeleteAll
-  // const selectedTask = await Tasks.deleteMany(Tasks.isSelected);
-  // console.log(selectedTask);
-
   try {
     const selectedCardArr = req.body;
 
@@ -156,6 +136,25 @@ export const selectedTaskDelete = async (req, res, next) => {
   }
 };
 
+// export const selectesTaskSendRecycle = async (req, res, next) => {
+//   const selectedCardArr = req.body;
+
+//   try {
+//     if (selectedCardArr.length === 0)
+//       return next(errorHandler(400, "You should select-task"));
+
+//     selectedCardArr.map((item) =>
+//       console.log(item.isComplited).populate("Tasks")
+//     );
+//     await Tasks.updateMany({ $set: { findIds } });
+//     Tasks.save();
+//     const updateTask = await Tasks.updateMany({});
+//     res.status(202).json("Task successfully send to recycle bin");
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
 export const searchInput = async (req, res, next) => {
   const { title } = req.query;
   const { id } = req.user;
@@ -172,4 +171,25 @@ export const searchInput = async (req, res, next) => {
   });
 
   res.status(200).json(resultTasks);
+};
+
+export const recycleBin = async (req, res, next) => {
+  const id = req.params.id;
+
+  try {
+    const isExist = await Tasks.findById({ _id: id });
+
+    if (!isExist) return next(errorHandler(400, "Invalid ID"));
+
+    isExist.isDeleted = !isExist.isDeleted;
+
+    isExist.save();
+
+    res.status(202).json({
+      success: true,
+      message: `Task successfully Switch ${isExist.isDeleted}`,
+    });
+  } catch (error) {
+    next(error);
+  }
 };

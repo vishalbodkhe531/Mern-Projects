@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { IoMdMore } from "react-icons/io";
 import { RxCross1 } from "react-icons/rx";
 import { FaRegEdit } from "react-icons/fa";
+import { LuPinOff } from "react-icons/lu";
 
 import {
   Box,
@@ -31,41 +32,34 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { LuPinOff } from "react-icons/lu";
 import { removeSelecteCard, selectedCardArr } from "../app/features/userSlice";
+import { API } from "../main";
 
-function Cart({ cartId, cartTitle, cartDesc }) {
+function Cart({ cartId, cartTitle, cartDesc, isPin }) {
   const dispatchData = useDispatch();
 
-  // console.log(cartId);
-  const handleDeleteBtn = async () => {
-    const data = await fetch(`api/task/delete-task/${cartId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "Application/json",
-      },
-      body: JSON.stringify(cartId),
-    });
+  // States
+  const [checkBg, setCheckBg] = useState(false);
+  const [chekedArr, setchekedArr] = useState([]);
+  const [isActivePin, setIsActivePin] = useState(false);
+  const [openOption, SetOpenOption] = useState(false);
 
-    const result = await data.json();
-    console.log(result);
+  // HandleBTN's
+
+  const handleDeleteBtn = async () => {
+    const data = await fetch(`${API}/api/task/recycle-bin-check/${cartId}`, {
+      method: "GET",
+      credentials: "include",
+    });
   };
 
   const handlePINBtn = async () => {
     setIsActivePin(true);
-    const data = await fetch(`api/task/pin-task/${cartId}`);
-
-    const result = await data.json();
-    console.log(result);
+    const data = await fetch(`${API}/api/task/pin-task/${cartId}`, {
+      method: "GET",
+      credentials: "include",
+    });
   };
-
-  const [checkBg, setCheckBg] = useState(false);
-
-  const [chekedArr, setchekedArr] = useState([]);
-
-  const [isActicePin, setIsActivePin] = useState(false);
-
-  const [openOption, SetOpenOption] = useState(false);
 
   const handleCheckBtn = async () => {
     setCheckBg(true);
@@ -87,181 +81,217 @@ function Cart({ cartId, cartTitle, cartDesc }) {
 
   const handleModelSubmite = async (e) => {
     e.preventDefault();
-    const data = await fetch(`api/task/update-task/${cartId}`, {
+    const data = await fetch(`${API}/api/task/update-task/${cartId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "Application/json",
       },
+      credentials: "include",
       body: JSON.stringify({ title: formTitle, descriptione: formDesc }),
     });
+
+    const result = await data.json();
+
+    console.log(result);
   };
 
   return (
     <>
-      <Card
-        backdropFilter={"blur(16px)"}
-        bg={"transparent"}
-        w={["23rem", "20rem"]}
-        // maxW={"container-2xl"}
-        h={["14rem", "17rem"]}
-        margin={"0 5rem 5rem 5rem"}
-        // backgroundColor={"red"}
-        p={"0"}
-        // mt={"2"}
+      <Box
+        w={["10rem", "20rem"]}
+        display={"flex"}
+        justifyContent={"center"}
+        p={"2"}
       >
-        <CardHeader display={"flex"} justifyContent={"space-between"}>
-          <Heading size="md" display={["none", "flex"]}>
-            Client Report
-          </Heading>
-          <Box
+        <Card
+          backdropFilter={"blur(16px)"}
+          bg={"transparent"}
+          h={["10rem", "17rem"]}
+          margin={["0 1rem 2rem 1rem", "0 2rem 5rem 2rem"]}
+          py={["2", "1"]}
+          w={["10rem", "18rem"]}
+          shadow={"3px 3px 25px 3px white"}
+        >
+          <CardHeader
             display={"flex"}
             justifyContent={"space-between"}
-            mr={"10"}
-            w={["10rem", "5rem"]}
-            // bg={"green"}
+            p={["0", "3"]}
           >
-            <Box>
-              {checkBg ? (
-                <Image
-                  src={checkPng}
-                  h={"30px"}
-                  pos={"absolute"}
-                  top={"13px"}
-                  left={"11.50rem"}
-                  cursor={"pointer"}
-                  onClick={handleCheckBtn}
-                />
-              ) : null}
-              <Box display={"flex"}>
-                <RiCheckboxBlankCircleLine
-                  size={"1.50em"}
-                  cursor={"pointer"}
-                  onClick={handleCheckBtn}
-                />
+            <Heading size="md" display={["none", "flex"]}>
+              Client Report
+            </Heading>
+            <Box
+              display={"flex"}
+              justifyContent={"space-between"}
+              mr={"2"}
+              w={["10rem", "5rem"]}
+            >
+              <Box>
+                {checkBg ? (
+                  <Image
+                    src={checkPng}
+                    h={"22px"}
+                    pos={"absolute"}
+                    left={["5", "10rem"]}
+                    top={["1", "0.80rem"]}
+                    cursor={"pointer"}
+                    onClick={handleCheckBtn}
+                  />
+                ) : null}
+                <Box display={"flex"} ml={"4"}>
+                  <RiCheckboxBlankCircleLine
+                    pos={"relateve"}
+                    size={"1.20em"}
+                    cursor={"pointer"}
+                    onClick={handleCheckBtn}
+                  />
+                </Box>
+              </Box>
+              <Box display={"flex"} alignItems={"center"}>
+                {openOption ? (
+                  <RxCross1
+                    size={"1.20em"}
+                    cursor={"pointer"}
+                    onClick={() => SetOpenOption(false)}
+                  />
+                ) : (
+                  // <Box >
+                  <IoMdMore
+                    size={"1.30em"}
+                    onClick={() => SetOpenOption(true)}
+                    cursor={"pointer"}
+                  />
+                  // </Box>
+                )}
               </Box>
             </Box>
-            <Box display={"flex"} alignItems={"center"}>
-              {openOption ? (
-                <RxCross1
-                  size={"1.20em"}
-                  cursor={"pointer"}
-                  onClick={() => SetOpenOption(false)}
-                />
-              ) : (
-                <IoMdMore
-                  size={"1.60em"}
-                  onClick={() => SetOpenOption(true)}
-                  cursor={"pointer"}
-                />
-              )}
-            </Box>
-          </Box>
-        </CardHeader>
+          </CardHeader>
 
-        <CardBody>
-          <div style={openOption ? { display: "flex" } : { display: "none" }}>
-            <Box pos={"absolute"} right={"1"} top={"3.50em"}>
-              <Box display={"flex"} mt={"2"}>
-                <Button size={"1"} onClick={handlePINBtn} mt={"1"}>
-                  <LuPin size={"1.15em"} cursor={"pointer"} />
-                  <Box ml={"2"}>PIN</Box>
+          <CardBody>
+            <div style={openOption ? { display: "flex" } : { display: "none" }}>
+              <Box pos={"absolute"} right={["-1", "1"]} top={["2em", "3.50em"]}>
+                <Box display={"flex"} mt={["0", "2"]}>
+                  {isPin ? (
+                    <Button size={"1"} onClick={handlePINBtn} mt={"1"}>
+                      <LuPinOff size={"1em"} cursor={"pointer"} />
+                      <Box ml={"2"} fontSize={["12", "15"]}>
+                        PIN
+                      </Box>
+                    </Button>
+                  ) : (
+                    <Button size={"1"} onClick={handlePINBtn} mt={"1"}>
+                      <LuPin size={"1em"} cursor={"pointer"} />
+                      <Box ml={"2"} fontSize={["12", "15"]}>
+                        PIN
+                      </Box>
+                    </Button>
+                  )}
+                </Box>
+                <Box
+                  display={"flex"}
+                  mt={["0.10em", "2"]}
+                  onClick={handleDeleteBtn}
+                >
+                  <Button size={"1"} mt={"1"} fontSize={("4", "15")}>
+                    <MdDelete size={"1em"} cursor={"pointer"} />
+                    <Box ml={"2"} fontSize={["12", "15"]}>
+                      Delete
+                    </Box>
+                  </Button>
+                </Box>
+
+                <Box display={"flex"} mt={"2"}>
+                  <Button
+                    size={"1"}
+                    mt={["0.7px", "2"]}
+                    ml={"1"}
+                    onClick={onOpen}
+                  >
+                    <FaRegEdit size={"1em"} cursor={"pointer"} />
+                    <Box ml={"2"} fontSize={["12", "15"]}>
+                      Edit
+                    </Box>
+                  </Button>
+                </Box>
+              </Box>
+            </div>
+            <Stack divider={<StackDivider />} spacing="3">
+              <Box>
+                <Heading
+                  fontSize={["0.70rem", "1.20rem"]}
+                  textTransform="uppercase"
+                  borderRadius={"5px"}
+                >
+                  Title
+                </Heading>
+                <Text pt="2" fontSize={["0.70rem", "1.10rem"]}>
+                  {cartTitle}
+                </Text>
+              </Box>
+              <Box>
+                <Heading
+                  textTransform="uppercase"
+                  fontSize={["0.70rem", "1.20rem"]}
+                  borderRadius={"5px"}
+                >
+                  desc
+                </Heading>
+                <Text pt="2" fontSize={["0.70rem", "1rem"]}>
+                  {cartDesc}
+                </Text>
+              </Box>
+            </Stack>
+          </CardBody>
+        </Card>
+        <Modal
+          initialFocusRef={initialRef}
+          finalFocusRef={finalRef}
+          isOpen={isOpen}
+          onClose={onClose}
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Create your account</ModalHeader>
+            <ModalCloseButton />
+            <form onSubmit={handleModelSubmite}>
+              <ModalBody pb={6}>
+                <FormControl>
+                  <FormLabel>Title</FormLabel>
+                  <Input
+                    ref={initialRef}
+                    value={formTitle}
+                    onChange={(e) => setFormTitle(e.target.value)}
+                    name="title"
+                  />
+                </FormControl>
+
+                <FormControl mt={4}>
+                  <FormLabel>Descriptione</FormLabel>
+                  <Input
+                    h={"5rem"}
+                    value={formDesc}
+                    name="descriptione"
+                    onChange={(e) => setFormDesc(e.target.value)}
+                  />
+                </FormControl>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  onClick={onClose}
+                  type="submit"
+                  // onClick={handleModelSubmite}
+                >
+                  Save
                 </Button>
-              </Box>
-              <Box display={"flex"} mt={"2"} onClick={handleDeleteBtn}>
-                <Button size={"1"} mt={"1"}>
-                  <MdDelete size={"1.20em"} cursor={"pointer"} />
-                  <Box ml={"2"}>Delete</Box>
-                </Button>
-              </Box>
-
-              <Box display={"flex"} mt={"2"}>
-                <Button size={"1"} mt={"1"} ml={"1"} onClick={onOpen}>
-                  <FaRegEdit size={"1.10em"} cursor={"pointer"} />
-                  <Box ml={"2"}>Edit</Box>
-                </Button>
-              </Box>
-            </Box>
-          </div>
-          <Stack divider={<StackDivider />} spacing="4">
-            <Box>
-              <Heading
-                fontSize={"1.20rem"}
-                textTransform="uppercase"
-                // w={"3.60rem"}
-                // textAlign={"center"}
-                borderRadius={"5px"}
-              >
-                Title
-              </Heading>
-              <Text pt="2" fontSize="1.10rem">
-                {cartTitle}
-              </Text>
-            </Box>
-            <Box>
-              <Heading
-                fontSize={"1.20rem"}
-                textTransform="uppercase"
-                // w={"9rem"}
-                // textAlign={"center"}
-                borderRadius={"5px"}
-              >
-                descriptione
-              </Heading>
-              <Text pt="2" fontSize="1.10rem">
-                {cartDesc}
-              </Text>
-            </Box>
-          </Stack>
-        </CardBody>
-      </Card>
-      <Modal
-        initialFocusRef={initialRef}
-        finalFocusRef={finalRef}
-        isOpen={isOpen}
-        onClose={onClose}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Create your account</ModalHeader>
-          <ModalCloseButton />
-          <form onSubmit={handleModelSubmite}>
-            <ModalBody pb={6}>
-              <FormControl>
-                <FormLabel>Title</FormLabel>
-                <Input
-                  ref={initialRef}
-                  value={formTitle}
-                  onChange={(e) => setFormTitle(e.target.value)}
-                  name="title"
-                />
-              </FormControl>
-
-              <FormControl mt={4}>
-                <FormLabel>Descriptione</FormLabel>
-                <Input
-                  h={"5rem"}
-                  value={formDesc}
-                  name="descriptione"
-                  onChange={(e) => setFormDesc(e.target.value)}
-                />
-              </FormControl>
-            </ModalBody>
-
-            <ModalFooter>
-              <Button
-                colorScheme="blue"
-                mr={3}
-                onClick={onClose}
-                type="submit"
-                // onClick={handleModelSubmite}
-              >
-                Save
-              </Button>
-              <Button onClick={onClose}>Cancel</Button>
-            </ModalFooter>
-          </form>
-        </ModalContent>
-      </Modal>
+                <Button onClick={onClose}>Cancel</Button>
+              </ModalFooter>
+            </form>
+          </ModalContent>
+        </Modal>
+      </Box>
     </>
   );
 }

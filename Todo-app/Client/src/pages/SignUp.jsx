@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { API } from "../main";
 
 import { useDispatch } from "react-redux";
 
@@ -22,11 +23,12 @@ function SignUp() {
     try {
       // dispatch(setLoading(true));
       setLoading(true);
-      const data = await fetch("/api/user/register", {
+      const data = await fetch(`${API}/api/user/register`, {
         method: "POST",
         headers: {
           "Content-Type": "Application/json",
         },
+        credentials: "include",
         body: JSON.stringify(formData),
       });
 

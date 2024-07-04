@@ -9,6 +9,7 @@ import {
   signInStart,
   signInSuccess,
 } from "../app/features/userSlice";
+import { API } from "../main";
 
 const OAuth = () => {
   const naviget = useNavigate();
@@ -28,11 +29,12 @@ const OAuth = () => {
       const result = await signInWithPopup(auth, Provider);
       console.log(result);
 
-      const data = await fetch("/api/user/googlelogin", {
+      const data = await fetch(`${API}/api/user/googlelogin`, {
         method: "POST",
         headers: {
           "Content-Type": "Application/json",
         },
+        credentials : "include",
         body: JSON.stringify({
           name: result.user.displayName,
           email: result.user.email,
@@ -70,21 +72,10 @@ const OAuth = () => {
 
   return (
     <>
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        {/* <img
-          className="mx-auto h-24 w-auto"
-          src={result.photoURL}
-          alt="Your Company"
-          title="logo"
-        /> */}
-        {/* <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 uppercase">
-          Sign in
-        </h2> */}
-      </div>
+      <div className="sm:mx-auto sm:w-full sm:max-w-sm"></div>
       <button
         className="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed"
         onClick={handleGoogleBtn}
-        // loading={}
         disabled={loading}
       >
         {loading ? "LOADING..." : "SIGN WITH GOOGLE"}
@@ -94,37 +85,3 @@ const OAuth = () => {
 };
 
 export default OAuth;
-
-// import React from "react";
-// import { useSelector } from "react-redux";
-// import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
-// import { app } from "../firebase";
-
-// function OAuth() {
-//   const { currentUser } = useSelector((state) => state.user);
-
-//   const handleGoogleBtn = async () => {
-//     try {
-//       const Provider = new GoogleAuthProvider();
-//       const Auth = getAuth(app);
-//       const result = await signInWithPopup(Provider, Auth);
-
-//       console.log(result);
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-
-//   return (
-//     <div className="">
-//       <button
-//         className="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed"
-//         onClick={handleGoogleBtn}
-//       >
-//         SIGN WITH GOOGLE
-//       </button>
-//     </div>
-//   );
-// }
-
-// export default OAuth;

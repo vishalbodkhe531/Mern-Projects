@@ -43,6 +43,8 @@ export const loginUser = async (req, res, next) => {
       .cookie("cookie", token, {
         httpOnly: true,
         maxAge: 12 * 24 * 60 * 60 * 1000,
+        secure: true,
+        sameSite: "None",
       })
 
       .status(202)
@@ -107,9 +109,6 @@ export const updateUser = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res, next) => {
-  if (req.user.id !== req.params.id)
-    return next(errorHandler(400, "You can delete only your profile"));
-
   try {
     await User.findByIdAndDelete(req.params.id);
 
@@ -118,6 +117,7 @@ export const deleteUser = async (req, res, next) => {
       .status(200)
       .json({ success: true, message: "User successfully deleted" });
   } catch (error) {
+    console.log(`Error while deleteUser Profile : ${error}`);
     next(error);
   }
 };
@@ -140,6 +140,8 @@ export const googleAuth = async (req, res, next) => {
         .cookie("cookie", token, {
           httpOnly: true,
           maxAge: 12 * 24 * 60 * 60 * 1000,
+          secure: true,
+          sameSite: "None",
         })
         .status(202)
         .json(userData);
@@ -166,6 +168,8 @@ export const googleAuth = async (req, res, next) => {
       .cookie("cookie", token, {
         httpOnly: true,
         maxAge: 12 * 24 * 60 * 60 * 1000,
+        secure: true,
+        sameSite: "None",
       })
       .status(202)
       .json(userData);

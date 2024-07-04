@@ -38,7 +38,7 @@ function Home() {
             <Text fontSize={["1.84rem", "3rem"]}>Organize it all</Text>
             <Text fontSize={["1rem", "1.50rem"]}>with Task-Maneger</Text>
             <Link to={"/note-task"}>
-              <Button colorScheme="red" mt={"6"}>
+              <Button colorScheme="red" mt={"6"} fontSize={"12"} py={"0"}>
                 Let's Go...
               </Button>
             </Link>

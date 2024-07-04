@@ -11,6 +11,8 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import NoteTask from "./pages/NoteTask";
 import CartData from "./components/CartData";
+import RecycleBin from "./pages/RecycleBin";
+import RecycleData from "./components/RecycleData";
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/note-task" element={<NoteTask />} />
           <Route path="/allTask" element={<CartData />} />
+          <Route path="/recycle-bin" element={<RecycleData />} />
         </Route>
         <Route path="*" element={<Navigate to={"/"} />} />
       </Routes>

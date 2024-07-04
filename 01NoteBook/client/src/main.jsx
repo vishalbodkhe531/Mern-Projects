@@ -6,6 +6,8 @@ import { ChakraBaseProvider, ColorModeScript, theme } from "@chakra-ui/react";
 import { Provider } from "react-redux";
 import { store } from "./app/store.js";
 
+export const API = import.meta.env.VITE_API_KEY;
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ColorModeScript />

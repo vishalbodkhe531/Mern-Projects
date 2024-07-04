@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { deleteUser, logoutUser } from "../app/features/userSlice";
+import {API} from "../main"
 
 function Profile() {
   const { currentUser } = useSelector((state) => state.user);
@@ -16,8 +17,9 @@ function Profile() {
   const dispatch = useDispatch();
 
   const deleteHandler = async () => {
-    const data = await fetch(`/api/user/delete/${currentUser._id}`, {
+    const data = await fetch(`${API}/api/user/delete/${currentUser._id}`, {
       method: "DELETE",
+      credentials : "include"
     });
     const result = await data.json();
 
@@ -33,7 +35,7 @@ function Profile() {
   };
 
   const logoutHandler = async () => {
-    const data = await fetch("/api/user/logout");
+    const data = await fetch(`${API}/api/user/logout`);
 
     const result = await data.json();
 
@@ -52,7 +54,7 @@ function Profile() {
     setUpdateUser(true);
     try {
       if (updateUser) {
-        const data = await fetch(`/api/user/update/${currentUser._id}`, {
+        const data = await fetch(`${API}/api/user/update/${currentUser._id}`, {
           type: "PUT",
           headers: {
             "Content-Type": "Application/json",

@@ -6,7 +6,6 @@ const initialState = {
     : null,
   selectedCardArr: [],
   loading: false,
-  // pinArr: [],
 };
 
 const userSlice = createSlice({
@@ -22,10 +21,8 @@ const userSlice = createSlice({
     },
     signInSuccess: (state, action) => {
       state.loading = false;
-      state.currentUser = localStorage.setItem(
-        "currentUser",
-        JSON.stringify(action.payload)
-      );
+      state.currentUser = action.payload;
+      localStorage.setItem("currentUser", JSON.stringify(action.payload));
     },
     selectedCardArr: (state, action) => {
       state.selectedCardArr.push(action.payload);
@@ -36,10 +33,10 @@ const userSlice = createSlice({
         (item) => item != action.payload
       );
     },
-    // pinCard: (state, action) => {
-    //   state.pinArr.push(action.payload);
-    //   // console.log(action.payload);
-    // },
+
+    deleteUser: (state, action) => {
+      state.currentUser = localStorage.clear(action.payload);
+    },
   },
 });
 
@@ -50,6 +47,7 @@ export const {
   selectedCardArr,
   removeSelecteCard,
   pinCard,
+  deleteUser,
 } = userSlice.actions;
 
 export default userSlice.reducer;

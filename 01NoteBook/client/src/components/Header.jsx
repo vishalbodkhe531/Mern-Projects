@@ -57,17 +57,20 @@ function Header() {
                   </Button>
                 </Link>
 
-                <Link to={"/about"}>
-                  <Button {...btnCSS} onClick={onClose}>
-                    About
-                  </Button>
-                </Link>
-
-                <Link to={"/recycle-bin"}>
-                  <Button {...btnCSS} onClick={onClose}>
-                    RECYCLE-BIN
-                  </Button>
-                </Link>
+                {currentUser ? (
+                  <>
+                    <Link to={"/recycle-bin"}>
+                      <Button {...btnCSS} onClick={onClose}>
+                        RECYCLE-BIN
+                      </Button>
+                    </Link>
+                    <Link to={"/note-task"}>
+                      <Button {...btnCSS} onClick={onClose}>
+                        TASKS
+                      </Button>
+                    </Link>
+                  </>
+                ) : null}
               </VStack>
               <HStack
                 pos={"absolute"}
@@ -104,7 +107,7 @@ function Header() {
                 src={currentUser.profilePic}
                 borderRadius={"full"}
                 zIndex={"overlay"}
-                h={["35px", "50px"]}
+                h={["35px", "40px"]}
               ></Image>
             </Link>
           </Button>
@@ -115,9 +118,10 @@ function Header() {
               color={"black"}
               zIndex={"overlay"}
               colorScheme="green"
-              p={"2"}
+              px={"3"}
+              mr={"2"}
               borderRadius={"10px"}
-              fontSize={"1.30rem"}
+              fontSize={"0.80rem"}
             >
               Sign IN
             </Button>

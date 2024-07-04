@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Todo from "../components/Todo";
 import { InputData } from "../app/features/userSlice";
+import { API } from "../main";
 
 function HomePage() {
   // const dispatch = useDispatch();
@@ -82,11 +83,12 @@ function HomePage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const data = await fetch("/api/todo/task", {
+    const data = await fetch(`${API}/api/todo/task`, {
       method: "POST",
       headers: {
         "Content-Type": "Application/json",
       },
+      credentials : "include",
       body: JSON.stringify({ title: formData }),
     });
 
@@ -105,7 +107,7 @@ function HomePage() {
         duration: 4000,
         style: { borderRadius: "10px" },
       });
-      navigator("/todo");
+      setFormData("");
       return;
     }
   };
@@ -118,6 +120,7 @@ function HomePage() {
             style={{
               backgroundImage:
                 "url(https://png.pngtree.com/thumb_back/fh260/background/20231211/pngtree-christmas-mosk-up-wish-list-on-purple-background-notebook-todo-list-image_15497116.jpg)",
+              backgroundPosition: "center",
             }}
           >
             <div className="h-full" style={{ background: "rgba(0,0,0,0.4)" }}>

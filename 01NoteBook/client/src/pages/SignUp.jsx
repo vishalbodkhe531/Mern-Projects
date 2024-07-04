@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { API } from "../main";
 
 import { toast } from "react-hot-toast";
 import {
@@ -28,11 +29,12 @@ function SignUp() {
     e.preventDefault();
     dispatchData(signInStart(true));
 
-    const data = await fetch("/api/user/register", {
+    const data = await fetch(`${API}/api/user/register`, {
       method: "POST",
       headers: {
         "Content-Type": "Application/json",
       },
+      credentials: "include",
       body: JSON.stringify(formData),
     });
 

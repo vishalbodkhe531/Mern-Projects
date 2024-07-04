@@ -12,13 +12,13 @@ const taskSchema = new mongoose.Schema(
       required: true,
     },
 
-    // isSelected: {
-    //   type: Boolean,
-    //   default: false,
-    //   required: true,
-    // },
-
     isPinTask: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
+
+    isDeleted: {
       type: Boolean,
       default: false,
       required: true,

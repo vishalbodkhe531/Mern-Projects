@@ -4,7 +4,7 @@ function Home() {
   return (
     <>
       <div
-        className="h-[90vh] bg-cover"
+        className="h-[100vh] bg-cover"
         style={{
           backgroundImage:
             "url(https://free4kwallpapers.com/uploads/originals/2023/01/19/tree-in-the-wind-wallpaper.jpg)",

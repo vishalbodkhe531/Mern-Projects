@@ -18,15 +18,15 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
 
-    confirmPassword: {
+    gender: {
       type: String,
       required: true,
     },
 
-    // profilePic: {
-    //   type: String,
-    //   default: "/",
-    // },
+    profilePic: {
+      type: String,
+      default: "/",
+    },
   },
   { timestamps: true }
 );

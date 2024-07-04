@@ -20,6 +20,6 @@ userRoutes.get("/logout", userLogout);
 userRoutes.get("/profile", IsAuthenticatedUser, userProfile);
 
 userRoutes.put("/update/:id", IsAuthenticatedUser, updateUser);
-userRoutes.delete("/delete/:id", IsAuthenticatedUser, deleteUser);
+userRoutes.delete("/delete-user/:id", IsAuthenticatedUser, deleteUser);
 
 export default userRoutes;

@@ -4,15 +4,12 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export const usercreate = async (req, res, next) => {
-  const { name, userName, password, confirmPassword } = req.body;
-  // console.log(name, userName, password, confirmPassword);
+  const { name, userName, password, confirmPassword, gender } = req.body;
   try {
     const isExist = await User.findOne({ userName: userName });
 
     if (isExist) return next(errorHandler(400, "User already existed"));
 
-    console.log(password.length);
-    // const passLength = password.length
     if (password.length < 6)
       return next(errorHandler(400, "please enter minimum 6 charecter"));
     if (password != confirmPassword)
@@ -22,7 +19,7 @@ export const usercreate = async (req, res, next) => {
     await User.create({
       name,
       userName,
-      confirmPassword,
+      gender,
       password: hashPass,
     });
 
@@ -36,25 +33,28 @@ export const usercreate = async (req, res, next) => {
 };
 
 export const loginUser = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { userName, password } = req.body;
 
   try {
-    const isExist = await User.findOne({ email });
+    const isExist = await User.findOne({ userName });
 
-    if (!isExist) return next(errorHandler(400, "User Not Found !!"));
+    if (!isExist) return next(errorHandler(404, "User Not Found !!"));
 
     const matchPass = bcryptjs.compareSync(password, isExist.password);
 
     if (!matchPass) return next(errorHandler(400, "Incorrect Password!!"));
 
     const token = jwt.sign({ _id: isExist._id }, process.env.SECREAT_KEY);
+
+    const { password: xyz, ...userData } = isExist._doc;
+
     res
       .cookie("cookie", token, {
         httpOnly: true,
         maxAge: 12 * 24 * 60 * 60 * 1000,
       })
       .status(202)
-      .json({ success: true, message: "User Successfully Login" });
+      .json(userData);
   } catch (error) {
     console.log(`Error while create user : ${error}`);
     next(error);
@@ -122,6 +122,19 @@ export const updateuser = async (req, res, next) => {
     const { password, ...userData } = newUser._doc;
 
     res.status(202).json(userData);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getUserForSideBar = async (req, res, next) => {
+  try {
+    const loggedInUserId = req.user._id;
+
+    const filterUsers = await User.find({
+      _id: { $ne: loggedInUserId },
+    }).select("-password");
+    res.status(200).json(filterUsers);
   } catch (error) {
     next(error);
   }

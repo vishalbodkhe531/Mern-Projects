@@ -46,6 +46,8 @@ export const loginUser = async (req, res, next) => {
     res
       .cookie("cookie", token, {
         httpOnly: true,
+        secure: true,
+        sameSite: "None",
         maxAge: 12 * 24 * 60 * 60 * 1000,
       })
       .status(202)
@@ -68,7 +70,11 @@ export const userProfile = async (req, res, next) => {
 export const logoutUser = async (req, res, next) => {
   try {
     res
-      .clearCookie("cookie")
+      .clearCookie("cookie", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+      })
       .status(200)
       .json({ message: "User successfully logout" });
   } catch (error) {
@@ -118,7 +124,11 @@ export const deleteUser = async (req, res, next) => {
     await User.findByIdAndDelete(req.params.id);
 
     res
-      .clearCookie("cookie")
+      .clearCookie("cookie", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+      })
       .status(200)
       .json({ success: true, message: "User successfully deleted" });
   } catch (error) {
@@ -141,6 +151,8 @@ export const googleAuth = async (req, res, next) => {
         .cookie("cookie", token, {
           httpOnly: true,
           maxAge: 12 * 24 * 60 * 60 * 1000,
+          secure: true,
+          sameSite: "None",
         })
         .status(200)
         .json(userData);
@@ -163,6 +175,8 @@ export const googleAuth = async (req, res, next) => {
       .cookie("cookie", token, {
         httpOnly: true,
         maxAge: 12 * 24 * 60 * 60 * 1000,
+        secure: true,
+        sameSite: "None",
       })
       .status(201)
       .json(userData);

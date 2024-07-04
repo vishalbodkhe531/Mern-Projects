@@ -10,6 +10,7 @@ import {
   signInSuccess,
 } from "../app/features/userSlice";
 import GoogleBtn from "../components/GoogleBtn";
+import { API } from "../main";
 
 function SignIn() {
   const [formData, setFormData] = useState({});
@@ -26,11 +27,12 @@ function SignIn() {
   const handleSubmite = async (e) => {
     e.preventDefault();
     dispatchData(signInStart(true));
-    const data = await fetch("/api/user/login", {
+    const data = await fetch(`${API}/api/user/login`, {
       method: "POST",
       headers: {
         "Content-Type": "Application/json",
       },
+      credentials: "include",
       body: JSON.stringify(formData),
     });
 

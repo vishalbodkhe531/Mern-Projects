@@ -11,6 +11,8 @@ import {
   signInSuccess,
 } from "../app/features/userSlice";
 
+import { API } from "../main";
+
 function GoogleBtn() {
   const navigeter = useNavigate();
 
@@ -26,11 +28,12 @@ function GoogleBtn() {
 
     dispatchData(signInStart(true));
 
-    const data = await fetch("/api/user/google-auth", {
+    const data = await fetch(`${API}/api/user/google-auth`, {
       method: "POST",
       headers: {
         "Content-Type": "Application/json",
       },
+      credentials: "include",
       body: JSON.stringify({
         displayName,
         email,
